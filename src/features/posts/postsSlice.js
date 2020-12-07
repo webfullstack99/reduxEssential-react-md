@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Axios from 'axios';
+import { mainApiDomain } from '../../shared/config';
 
 const initialState = {
     posts: [],
@@ -9,17 +10,17 @@ const initialState = {
 
 const asyncThunks = {
     fetchPosts: createAsyncThunk('posts/fetchPosts', async () => {
-        const response = await Axios.get('http://localhost:3000/api/posts');
+        const response = await Axios.get(`${mainApiDomain}/api/posts`);
         return response.data.data
     }),
 
     addNewPost: createAsyncThunk('posts/addNewPost', async initialPost => {
-        const response = await Axios.post('http://localhost:3000/api/posts', { post: initialPost })
+        const response = await Axios.post(`${mainApiDomain}/api/posts`, { post: initialPost })
         return response.data.data;
     }),
 
     editPost: createAsyncThunk('posts/editPost', async post => {
-        const response = await Axios.put(`http://localhost:3000/api/posts/${post._id}`, { post });
+        const response = await Axios.put(`${mainApiDomain}/api/posts/${post._id}`, { post });
         return response.data.data;
     }),
 
@@ -27,7 +28,7 @@ const asyncThunks = {
         const { postId, reaction } = data;
         let existingPost = thunkApi.getState().posts.posts.find(post => post._id === postId);
         if (existingPost) {
-            let reactions = {...existingPost.reactions};
+            let reactions = { ...existingPost.reactions };
             if (reactions !== undefined) {
                 if (reactions[reaction] !== undefined) {
                     reactions[reaction]++;
@@ -37,13 +38,13 @@ const asyncThunks = {
             } else {
                 reactions = { [reaction]: 1 };
             }
-            const response = await Axios.put(`http://localhost:3000/api/posts/addReactions/${postId}`, { reactions });
+            const response = await Axios.put(`${mainApiDomain}/api/posts/addReactions/${postId}`, { reactions });
             return response.data.data;
         }
     }),
 
     deletePost: createAsyncThunk('posts/deletePost', async postId => {
-        await Axios.delete(`http://localhost:3000/api/posts/${postId}`);
+        await Axios.delete(`${mainApiDomain}/api/posts/${postId}`);
         return postId;
     })
 }

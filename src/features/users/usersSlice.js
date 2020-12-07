@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Axios from 'axios';
+import { mainApiDomain } from '../../shared/config';
 
 const initialState = {
     users: [],
@@ -8,7 +9,7 @@ const initialState = {
 }
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-    const response = await Axios.get('http://localhost:3000/api/users');
+    const response = await Axios.get(`${mainApiDomain}/api/users`);
     return response.data.data
 })
 

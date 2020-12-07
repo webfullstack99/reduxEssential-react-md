@@ -1,0 +1,1 @@
+export const mainApiDomain = 'https://ap-webserver.herokuapp.com/';
