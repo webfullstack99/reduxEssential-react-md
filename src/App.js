@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Redirect,
@@ -20,7 +19,6 @@ class AppComponent extends React.Component {
 
     render() {
         return (
-            <Router>
                 <div className="App">
                     {/* NAVBAR */}
                     <Navbar></Navbar>
@@ -58,7 +56,6 @@ class AppComponent extends React.Component {
                     </Switch>
                     <NotificationContainer></NotificationContainer>
                 </div>
-            </Router>
         );
     }
 }
