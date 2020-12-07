@@ -1,3 +1,4 @@
+/*
 import {
   Server,
   Model,
@@ -212,3 +213,5 @@ new Server({
     server.createList('user', 3)
   },
 })
+
+*/
