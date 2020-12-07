@@ -1,8 +1,8 @@
 import React from 'react'
 import {
-    Switch,
     Route,
     Redirect,
+    HashRouter,
 } from 'react-router-dom'
 
 import Navbar from './app/Navbar'
@@ -23,7 +23,7 @@ class AppComponent extends React.Component {
                     {/* NAVBAR */}
                     <Navbar></Navbar>
 
-                    <Switch>
+                    <HashRouter>
 
                         {/* HOME */}
                         <Route
@@ -53,7 +53,7 @@ class AppComponent extends React.Component {
 
                         {/* DEFAULT */}
                         <Redirect to="/posts" />
-                    </Switch>
+                    </HashRouter>
                     <NotificationContainer></NotificationContainer>
                 </div>
         );
