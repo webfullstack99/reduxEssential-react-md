@@ -2,7 +2,7 @@ import React from 'react'
 import {
     Route,
     Redirect,
-    HashRouter,
+    Switch,
 } from 'react-router-dom'
 
 import Navbar from './app/Navbar'
@@ -19,43 +19,42 @@ class AppComponent extends React.Component {
 
     render() {
         return (
-                <div className="App">
-                    {/* NAVBAR */}
-                    <Navbar></Navbar>
+            <div className="App">
+                {/* NAVBAR */}
+                <Navbar></Navbar>
 
-                    <HashRouter>
+                <Switch>
+                    {/* HOME */}
+                    <Route
+                        exact
+                        path="/"
+                        component={HomeComponent}
+                    />
 
-                        {/* HOME */}
-                        <Route
-                            exact
-                            path="/"
-                            component={HomeComponent}
-                        />
+                    {/* POSTS */}
+                    <Route
+                        exact
+                        path="/posts"
+                        component={PostIndex}
+                    />
 
-                        {/* POSTS */}
-                        <Route
-                            exact
-                            path="/posts"
-                            component={PostIndex}
-                        />
+                    {/* SINGLE POST */}
+                    <Route
+                        exact
+                        path="/posts/:postId"
+                        component={SinglePostPageComponent}
+                    />
+                    <Route
+                        exact
+                        path="/posts/form/:postId"
+                        component={PostFormComponent}
+                    />
 
-                        {/* SINGLE POST */}
-                        <Route
-                            exact
-                            path="/posts/:postId"
-                            component={SinglePostPageComponent}
-                        />
-                        <Route
-                            exact
-                            path="/posts/form/:postId"
-                            component={PostFormComponent}
-                        />
-
-                        {/* DEFAULT */}
-                        <Redirect to="/posts" />
-                    </HashRouter>
-                    <NotificationContainer></NotificationContainer>
-                </div>
+                    {/* DEFAULT */}
+                    <Redirect to="/posts" />
+                </Switch>
+                <NotificationContainer></NotificationContainer>
+            </div>
         );
     }
 }
