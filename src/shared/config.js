@@ -1,1 +1,1 @@
-export const mainApiDomain = 'https://ap-webserver.herokuapp.com';
+export const mainApiDomain = 'https://ap-webserver.glitch.me';

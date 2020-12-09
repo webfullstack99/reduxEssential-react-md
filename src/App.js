@@ -12,10 +12,16 @@ import SinglePostPageComponent from './features/posts/single_post_page.component
 import PostFormComponent from './features/posts/post_form.component'
 import { NotificationContainer } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import { mainApiDomain } from './shared/config'
 
 
 class AppComponent extends React.Component {
 
+    constructor(props) {
+        super(props)
+        console.log(`api domain: ${mainApiDomain}`);
+        
+    }
 
     render() {
         return (
