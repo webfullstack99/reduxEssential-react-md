@@ -6,7 +6,6 @@ import {
 } from 'react-router-dom'
 
 import Navbar from './app/Navbar'
-import HomeComponent from './features/home/home.component'
 import PostIndex from './features/posts/post_index.component'
 import SinglePostPageComponent from './features/posts/single_post_page.component'
 import PostFormComponent from './features/posts/post_form.component'
@@ -20,7 +19,6 @@ class AppComponent extends React.Component {
     constructor(props) {
         super(props)
         console.log(`api domain: ${mainApiDomain}`);
-        
     }
 
     render() {
@@ -31,11 +29,13 @@ class AppComponent extends React.Component {
 
                 <Switch>
                     {/* HOME */}
+                    {/* 
                     <Route
                         exact
                         path="/"
                         component={HomeComponent}
                     />
+                     */}
 
                     {/* POSTS */}
                     <Route

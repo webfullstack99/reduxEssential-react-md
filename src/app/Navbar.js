@@ -30,11 +30,16 @@ class Navbar extends Component {
         return (
             <div className="navbar navbar-expand navbar-light bg-light justify-content-center">
                 <ul className="nav navbar-nav">
+                    {/* 
                     <li className="nav-item">
                         <Link className={`nav-link ${this.getActivePageClassIfIsActive('/')}`} to="/"><span>Home</span></Link>
                     </li>
+                     */}
                     <li className="nav-item">
                         <Link className={`nav-link ${this.getActivePageClassIfIsActive('/posts')} `} to="/posts"><span>Posts</span></Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className={`nav-link ${this.getActivePageClassIfIsActive('/users')} `} to="/users"><span>Users</span></Link>
                     </li>
                 </ul>
             </div>

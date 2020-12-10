@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { deletePost, fetchPosts } from './postsSlice';
+import { deletePost, fetchPosts, getAllPost, testAction } from './postsSlice';
 import { Link } from 'react-router-dom';
 import PostAuthorComponent from './post_author.component';
 import ReactionButtonComponent from './ReactionButtonComponent';
 import { NotificationManager } from 'react-notifications';
+import TimeAgoComponent from './TimeAgoComponent';
 
 class PostsListComponent extends React.Component {
 
@@ -19,28 +20,21 @@ class PostsListComponent extends React.Component {
         }
     }
 
-    getDisplayPosts = () => {
-        let orderedPosts = this.props.posts
-            .slice()
-            .sort((a, b) => {
-                return (-(a.created.localeCompare(b.created)));
-            })
-        return orderedPosts;
+    testActionClicked = () => {
+        this.props.testAction();
     }
 
     renderedPosts = () => {
         let renderedPosts = '';
-        renderedPosts = this.getDisplayPosts().map((post, index) => {
-
+        renderedPosts = this.props.posts.map((post, index) => {
             let key = post._id || Date.now();
             return (
                 <article className="post-excerpt" key={key}>
                     <h3><Link to={`/posts/${post._id}`}>{post.title}</Link></h3>
                     <div className="post-content">
-                        {post.description.substring(0, 100)}
-                    &nbsp;-&nbsp;
-                    <PostAuthorComponent userId={post.userId}></PostAuthorComponent>
-                        <ReactionButtonComponent post={post}></ReactionButtonComponent>
+                        {post.description.substring(0, 100)} &nbsp;-&nbsp;
+                        <PostAuthorComponent userId={post.userId}></PostAuthorComponent>
+                        <ReactionButtonComponent id={post._id}></ReactionButtonComponent>
                     </div>
                     <div>
                         <button onClick={() => { this.onDeletePostClicked(post) }} className="btn btn-danger">Delete</button>
@@ -76,7 +70,7 @@ class PostsListComponent extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        posts: state.posts.posts,
+        posts: getAllPost(state),
         status: state.posts.status,
     }
 }
@@ -87,6 +81,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         fetchPost: () => {
             dispatch(fetchPosts());
+        },
+        testAction: () => {
+            dispatch(testAction());
         }
     }
 }

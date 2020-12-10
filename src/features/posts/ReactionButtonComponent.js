@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addReactions } from './postsSlice';
+import { addReactions, getPostById } from './postsSlice';
 class ReactionButtonComponent extends React.Component {
 
     constructor(props) {
@@ -17,7 +17,7 @@ class ReactionButtonComponent extends React.Component {
     }
     onReactionClick = (reactionName) => {
         let params = { postId: this.props.post._id, reaction: reactionName };
-       this.props.addReaction(params);
+        this.props.addReaction(params);
 
     }
 
@@ -48,6 +48,11 @@ class ReactionButtonComponent extends React.Component {
     }
 }
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+        post: getPostById(state, ownProps.id)
+    }
+}
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         addReaction: (params) => {
@@ -56,4 +61,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ReactionButtonComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ReactionButtonComponent);

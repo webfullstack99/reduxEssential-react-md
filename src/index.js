@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 import './api/server'
 import { fetchUsers } from './features/users/usersSlice'
 import { fetchPosts } from './features/posts/postsSlice'
-import { BrowserRouter as Router, HashRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 
 store.dispatch(fetchPosts());
 store.dispatch(fetchUsers());

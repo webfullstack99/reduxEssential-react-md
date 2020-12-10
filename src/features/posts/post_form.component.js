@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getPostById, addNewPost, editPost } from './postsSlice'
+import { getPostById, addNewPost, editPost} from './postsSlice'
 import { withRouter } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
 

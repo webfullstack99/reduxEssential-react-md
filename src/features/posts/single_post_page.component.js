@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PostAuthorComponent from './post_author.component';
 import TimeAgoComponent from './TimeAgoComponent';
+import ReactionButtonComponent from './ReactionButtonComponent';
 import { getPostById } from './postsSlice';
 class SinglePostPageComponent extends React.Component {
 
@@ -17,9 +18,10 @@ class SinglePostPageComponent extends React.Component {
                         <p>
                             <PostAuthorComponent userId={post.userId}></PostAuthorComponent>
                             <TimeAgoComponent timestamp={post.created}></TimeAgoComponent>
+                            <ReactionButtonComponent id={post._id}></ReactionButtonComponent>
                         </p>
                         <div>
-                            <Link to={`/posts/form/${post._id}`}>Edit</Link>
+                            <Link className="btn btn-success" to={`/posts/form/${post._id}`}>Edit</Link>
                         </div>
                     </article>
                 </section>

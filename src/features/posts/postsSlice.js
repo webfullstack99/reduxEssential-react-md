@@ -1,13 +1,19 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import Axios from 'axios';
 import { mainApiDomain } from '../../shared/config';
 
-const initialState = {
-    posts: [],
+// POST ENTITY ADAPTER
+const postAdapter = createEntityAdapter({
+    selectId: (post) => post._id,
+    sortComparer: (a, b) => -(a.created.localeCompare(b.created)),
+});
+
+const initialState = postAdapter.getInitialState({
     status: 'idle',
     error: null,
-}
+})
 
+// THUNKS
 const asyncThunks = {
     fetchPosts: createAsyncThunk('posts/fetchPosts', async () => {
         const response = await Axios.get(`${mainApiDomain}/api/posts`);
@@ -26,7 +32,9 @@ const asyncThunks = {
 
     addReactions: createAsyncThunk('posts/addReactions', async (data, thunkApi) => {
         const { postId, reaction } = data;
-        let existingPost = thunkApi.getState().posts.posts.find(post => post._id === postId);
+        //let existingPost = thunkApi.getState().posts.posts.find(post => post._id === postId);
+        let existingPost = thunkApi.getState().posts.entities[postId];
+
         if (existingPost) {
             let reactions = { ...existingPost.reactions };
             if (reactions !== undefined) {
@@ -51,11 +59,15 @@ const asyncThunks = {
 
 export const { fetchPosts, addNewPost, deletePost, editPost, addReactions } = asyncThunks;
 
-
+// CREATE SLICE
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
-    reducers: {},
+    reducers: {
+        testAction: (state, action) => {
+            state.error = true;
+        }
+    },
     extraReducers: {
         // LIST
         [asyncThunks.fetchPosts.pending]: (state, action) => {
@@ -63,7 +75,9 @@ const postsSlice = createSlice({
         },
         [asyncThunks.fetchPosts.fulfilled]: (state, action) => {
             state.status = 'succeeded'
-            state.posts = state.posts.concat(action.payload)
+            //state.posts = state.posts.concat(action.payload)
+            //state.posts = state.posts
+            postAdapter.upsertMany(state, action.payload);
         },
         [asyncThunks.fetchPosts.rejected]: (state, action) => {
             state.status = 'failed'
@@ -72,25 +86,22 @@ const postsSlice = createSlice({
 
         // ADD
         [asyncThunks.addNewPost.fulfilled]: (state, action) => {
-            state.posts.unshift(action.payload)
+            //state.posts.unshift(action.payload)
+            postAdapter.addOne(state, action.payload);
         },
 
         // EDIT
         [asyncThunks.editPost.fulfilled]: (state, action) => {
-            const post = state.posts.find((post) => {
-                return (post._id === action.payload._id);
-            })
-            post.title = action.payload.title;
-            post.description = action.payload.description;
-            post.userId = action.payload.userId;
+            const existingPost = state.entities[action.payload._id];
+            existingPost.title = action.payload.title;
+            existingPost.description = action.payload.description;
+            existingPost.userId = action.payload.userId;
         },
 
         // ADD REACTIONS
         [asyncThunks.addReactions.fulfilled]: (state, action) => {
-            const post = state.posts.find((post) => {
-                return (post._id === action.payload._id);
-            })
-            post.reactions = action.payload.reactions;
+            const existingPost = state.entities[action.payload._id];
+            existingPost.reactions = action.payload.reactions;
         },
 
         [asyncThunks.addReactions.rejected]: (state, action) => {
@@ -98,24 +109,23 @@ const postsSlice = createSlice({
 
         // DELETE
         [asyncThunks.deletePost.fulfilled]: (state, action) => {
-            let index = state.posts.findIndex((post) => {
-                return (post._id === action.payload);
-            })
-            state.posts.splice(index, 1);
+            //let index = state.posts.findIndex((post) => {
+            //return (post._id === action.payload);
+            //})
+            //state.posts.splice(index, 1);
+            postAdapter.removeOne(state, action.payload);
         }
     }
 })
 
-// SELECTORS
-const selectors = {
-    getPostById: (state, id) => {
-        const post = state.posts.posts.find((post) => {
-            return (`${post._id}` === id);
-        })
-        return post;
-    }
-}
+// EXPORT SELECTORS
+export const {
+    selectAll: getAllPost,
+    selectById: getPostById,
+    selectIds: selectPostIds
+} = postAdapter.getSelectors(state => state.posts);
 
+// EXPORT ACTIONS
+export const { testAction } = postsSlice.actions;
 
-export const { getPostById } = selectors;
 export default postsSlice.reducer;
