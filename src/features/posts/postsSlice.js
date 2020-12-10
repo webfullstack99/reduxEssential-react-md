@@ -85,10 +85,11 @@ const postsSlice = createSlice({
         },
 
         // ADD
-        [asyncThunks.addNewPost.fulfilled]: (state, action) => {
-            //state.posts.unshift(action.payload)
-            postAdapter.addOne(state, action.payload);
-        },
+        //[asyncThunks.addNewPost.fulfilled]: (state, action) => {
+            ////state.posts.unshift(action.payload)
+            //postAdapter.addOne(state, action.payload);
+        //},
+        [asyncThunks.addNewPost.fulfilled]: postAdapter.addOne,
 
         // EDIT
         [asyncThunks.editPost.fulfilled]: (state, action) => {
@@ -108,21 +109,16 @@ const postsSlice = createSlice({
         },
 
         // DELETE
-        [asyncThunks.deletePost.fulfilled]: (state, action) => {
-            //let index = state.posts.findIndex((post) => {
-            //return (post._id === action.payload);
-            //})
-            //state.posts.splice(index, 1);
-            postAdapter.removeOne(state, action.payload);
-        }
+        [asyncThunks.deletePost.fulfilled]: postAdapter.removeOne,
     }
 })
+
 
 // EXPORT SELECTORS
 export const {
     selectAll: getAllPost,
     selectById: getPostById,
-    selectIds: selectPostIds
+    selectIds: getPostIds
 } = postAdapter.getSelectors(state => state.posts);
 
 // EXPORT ACTIONS

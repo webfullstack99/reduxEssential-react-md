@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { deletePost, fetchPosts, getAllPost, testAction } from './postsSlice';
-import { Link } from 'react-router-dom';
-import PostAuthorComponent from './post_author.component';
-import ReactionButtonComponent from './ReactionButtonComponent';
+import { deletePost, fetchPosts, getPostIds, testAction } from './postsSlice';
 import { NotificationManager } from 'react-notifications';
-import TimeAgoComponent from './TimeAgoComponent';
+import PostExcerptComponent from './post_excerpt.component';
 
 class PostsListComponent extends React.Component {
 
@@ -26,20 +23,11 @@ class PostsListComponent extends React.Component {
 
     renderedPosts = () => {
         let renderedPosts = '';
-        renderedPosts = this.props.posts.map((post, index) => {
-            let key = post._id || Date.now();
+        renderedPosts = this.props.postIds.map((id) => {
             return (
-                <article className="post-excerpt" key={key}>
-                    <h3><Link to={`/posts/${post._id}`}>{post.title}</Link></h3>
-                    <div className="post-content">
-                        {post.description.substring(0, 100)} &nbsp;-&nbsp;
-                        <PostAuthorComponent userId={post.userId}></PostAuthorComponent>
-                        <ReactionButtonComponent id={post._id}></ReactionButtonComponent>
-                    </div>
-                    <div>
-                        <button onClick={() => { this.onDeletePostClicked(post) }} className="btn btn-danger">Delete</button>
-                    </div>
-                </article>
+                <div key={id} className="my-2">
+                    <PostExcerptComponent  id={id}></PostExcerptComponent>
+                </div>
             )
         })
         return renderedPosts;
@@ -48,7 +36,7 @@ class PostsListComponent extends React.Component {
     showContent() {
         let content = '';
         if (this.props.status === 'succeeded') {
-            content = (this.props.posts.length > 0) ? this.renderedPosts() : 'No post to display!';
+            content = (this.props.postIds.length > 0) ? this.renderedPosts() : 'No post to display!';
         } else if (this.props.status === 'loading') {
             content = 'Loading ...';
         } else if (this.props.status === 'failed') {
@@ -70,7 +58,7 @@ class PostsListComponent extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        posts: getAllPost(state),
+        postIds: getPostIds(state),
         status: state.posts.status,
     }
 }

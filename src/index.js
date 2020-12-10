@@ -15,7 +15,7 @@ store.dispatch(fetchUsers());
 
 ReactDOM.render(
     <Provider store={store}>
-        <HashRouter basename={process.env.PUBLIC_URL}>
+        <HashRouter >
             <App />
         </HashRouter>
     </Provider>,
